@@ -1,0 +1,2 @@
+ALTER TABLE medico
+ADD COLUMN telefono VARCHAR(28);
