@@ -10,8 +10,12 @@ import med.voll.api.services.MedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
+import java.net.URL;
 import java.util.List;
 
 @RestController
@@ -22,8 +26,17 @@ public class MedicoController {
     MedicoService medicoService;
 
     @PostMapping
-    public void registarMedicos(@RequestBody  @Valid MedicoDTO medico) {
+    public ResponseEntity<MedicoDTO> registarMedicos(@RequestBody  @Valid MedicoDTO medico, UriComponentsBuilder uriComponentsBuilder) {
         medicoService.registarMedicos(medico);
+
+        URI url = uriComponentsBuilder.path("/medicos/{id}").buildAndExpand(medico.id()).toUri();
+        return ResponseEntity.created(url).body(medico);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity retornarMedico(@PathVariable @Valid Long id){
+        var medico = medicoService.retornarMedico(id);
+        return ResponseEntity.ok(medico);
     }
 
     @GetMapping
@@ -43,13 +56,15 @@ public class MedicoController {
 
     @PutMapping
     @Transactional
-    public void actualizarMedico(@RequestBody @Valid ActualizarMedicoDTO actualizarMedicoDTO){
+    public ResponseEntity actualizarMedico(@RequestBody @Valid ActualizarMedicoDTO actualizarMedicoDTO){
          medicoService.actualizarMedico(actualizarMedicoDTO);
+         return ResponseEntity.ok(actualizarMedicoDTO);
     }
 
     @DeleteMapping("/{id}")
     @Transactional
-    public void eliminarMedico(@PathVariable @Valid  Long id){
+    public ResponseEntity eliminarMedico(@PathVariable @Valid  Long id){
         medicoService.eliminarMedico(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,8 +1,8 @@
 package med.voll.api.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-@NotBlank
+@NotNull
 public record DireccionDTO(
         String calle,
         String distrito,

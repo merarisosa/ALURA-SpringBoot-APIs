@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class MedicoService {
                             medico.getDireccion().getCiudad()
                     );
                     return new MedicoDTO(
+                            medico.getId(),
                             medico.getNombre(),
                             medico.getEmail(),
                             medico.getTelefono(),
@@ -64,6 +66,24 @@ public class MedicoService {
         Medico medico = medicoRepository.getReferenceById(id);
         //medicoRepository.delete(medico);
         medico.desactivarMedico();
+    }
+
+    public MedicoDTO retornarMedico(Long id) {
+        Medico medico = medicoRepository.getReferenceById(id);
+        MedicoDTO medicoDTO = new MedicoDTO(
+                medico.getId(),
+                medico.getNombre(),
+                medico.getEmail(),
+                medico.getTelefono(),
+                medico.getDocumento(),
+                medico.getEspecialidad(),
+                new DireccionDTO(medico.getDireccion().getCalle(),
+                        medico.getDireccion().getDistrito(),
+                        medico.getDireccion().getCiudad(),
+                        medico.getDireccion().getNumero(),
+                        medico.getDireccion().getComplemento()
+                ));
+        return medicoDTO;
     }
 }
 

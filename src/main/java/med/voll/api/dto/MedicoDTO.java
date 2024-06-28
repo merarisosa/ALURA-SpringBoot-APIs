@@ -7,17 +7,20 @@ import jakarta.validation.constraints.Pattern;
 import med.voll.api.enums.Especialidad;
 
 public record MedicoDTO (
-        @NotBlank
+
+        Long id,
+
+        @NotNull
         String nombre,
 
-        @NotBlank
+        @NotNull
         @Email
         String email,
 
-        @NotBlank
+        @NotNull
         String telefono,
 
-        @NotBlank
+        @NotNull
         @Pattern(regexp = "\\d{4,6}")
         String documento,
 
